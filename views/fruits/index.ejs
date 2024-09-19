@@ -11,7 +11,7 @@
     <h1>All Fruits</h1>
     <ul>
         <% fruits.forEach(fruit => { %>
-            <li><%= fruit.name %></li>
+            <li><a href="/fruits/<%= fruit._id %>"><%= fruit.name %></a></li>
         <% }) %>
     </ul> <!-- the code block inside the unordered list allows the fruit variable we defined as well as the fruit in our object in server.js to show up on our webpage-->
 </body>
