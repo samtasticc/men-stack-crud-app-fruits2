@@ -23,6 +23,12 @@ app.get('/', (req, res) => {
     res.render('index.ejs') // this tells the server to display the HTML that is on the index.ejs page
 })
 
+app.get('/fruits', async(req, res) => {
+    const allFruits = await Fruit.find({})
+    console.log(allFruits)
+    res.render('fruits/index.ejs', {fruits: allFruits})
+})
+
 app.get('/fruits/new', (req, res) => {
     res.render('fruits/new.ejs')
 })
@@ -34,10 +40,11 @@ app.post('/fruits', async(req, res) => {
         req.body.isReadyToEat = true
     } else {
         req.body.isReadyToEat = false
-    } // this ternary operator will alter the rec.body object to reflect a Boolean in stead of 'on' or nothing
+    } // this ternary operator will alter the req.body object to reflect a Boolean in stead of 'on' or nothing
     // console.log(req.body)
     await Fruit.create(req.body)
-    res.redirect('/fruits/new') // will remove later. temporarily, once the user hits submit, this will redirect to the /fruits/new.ejs page
+    res.redirect('/fruits') // will remove later. temporarily, once the user hits submit, this will redirect to the /fruits/new.ejs page
+                            // we changed /fruits/new to /fruits so we will be redirected to the index of fruits.
 })
 
 app.listen(3000, () => {
