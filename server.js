@@ -6,6 +6,8 @@ require('dotenv').config() // this imports and converts, it has to be the first 
 const express = require("express");
 const mongoose = require('mongoose')
 const app = express();
+const methodOverride = require('method-override')
+const morgan = require('morgan')
 
 // ========= MONGOOSE ========= //
 mongoose.connect(process.env.MONGODB_URI)
@@ -17,6 +19,8 @@ const Fruit = require('./models/fruit.js')// this imports the Fruit model
 
 // ========= MIDDLEWARE ========= //
 app.use(express.urlencoded({extended: false})) // this enables Express to access the data using middleware.
+app.use(methodOverride('_method'))
+app.use(morgan('dev'))
 
 // ========= ROUTES ========= //
 app.get('/', (req, res) => {
