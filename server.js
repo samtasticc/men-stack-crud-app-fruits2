@@ -49,6 +49,16 @@ app.get('/fruits/:fruitId/edit', async(req, res) => {
     res.render('fruits/edit.ejs', {fruit: foundFruit})
 })
 
+app.put('/fruits/:fruitId', async(req, res) => {
+    if(req.body.isReadyToEat === 'on') {
+        req.body.isReadyToEat = true
+    } else {
+        req.body.isReadyToEat = false
+    }
+    await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)
+    res.redirect(`/fruits/${req.params.fruitId}`)
+})
+
 app.delete('/fruits/:fruitId', async(req, res) => {
     await Fruit.findByIdAndDelete(req.params.fruitId) // when we manipulate data (edit, delete, create) we always redirect. with GET, we render. everything else, redirect.
     // res.send('this is the delete route') // we res.send to make sure the route is working.
