@@ -1,10 +1,13 @@
+// ========= IMPORTS ========= //
 // Here is where we import modules
 require('dotenv').config() // this imports and converts, it has to be the first line of code.
+
 // We begin by loading Express
 const express = require("express");
 const mongoose = require('mongoose')
 const app = express();
 
+// ========= MONGOOSE ========= //
 mongoose.connect(process.env.MONGODB_URI)
 mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name}`)
@@ -12,12 +15,29 @@ mongoose.connection.on('connected', () => {
 
 const Fruit = require('./models/fruit.js')// this imports the Fruit model
 
+// ========= MIDDLEWARE ========= //
+app.use(express.urlencoded({extended: false})) // this enables Express to access the data using middleware.
+
+// ========= ROUTES ========= //
 app.get('/', (req, res) => {
     res.render('index.ejs') // this tells the server to display the HTML that is on the index.ejs page
 })
 
 app.get('/fruits/new', (req, res) => {
     res.render('fruits/new.ejs')
+})
+
+// POST /fruits --> method/action from our form in new.ejs
+app.post('/fruits', async(req, res) => {
+    // console.log(req.body)
+    if(req.body.isReadyToEat === 'on') {
+        req.body.isReadyToEat = true
+    } else {
+        req.body.isReadyToEat = false
+    } // this ternary operator will alter the rec.body object to reflect a Boolean in stead of 'on' or nothing
+    // console.log(req.body)
+    await Fruit.create(req.body)
+    res.redirect('/fruits/new') // will remove later. temporarily, once the user hits submit, this will redirect to the /fruits/new.ejs page
 })
 
 app.listen(3000, () => {
