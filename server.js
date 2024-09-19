@@ -10,6 +10,8 @@ mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name}`)
 })
 
+const Fruit = require('./models/fruit.js')// this imports the Fruit model
+
 app.get('/', (req, res) => {
     res.render('index.ejs') // this tells the server to display the HTML that is on the index.ejs page
 })
